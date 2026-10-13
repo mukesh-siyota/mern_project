@@ -1,8 +1,10 @@
 const express = require("express");
 const StudentController = require("./app/controller/StudentController");
 const TeacherController = require("./app/controller/TeacherController");
-const mongoose = require("mongoose")
-const PORT = 3000;
+const AuthController = require("./app/controller/AuthController")
+const mongoose = require("mongoose");
+const { PORT } = require("./app/utils/constants.utils");
+const { authMiddleware } = require("./app/middleware/authMiddleware");
 const app = express();
 
 app.use(express.json())
@@ -10,18 +12,20 @@ app.use(express.json())
 mongoose.connect("mongodb://localhost:27017/StudentDB");
 
 
-
-app.post("/student",StudentController.create);
-app.get("/student", StudentController.readAll);
+app.post("/student", [authMiddleware],StudentController.create);
+app.get("/student" , [authMiddleware],  StudentController.readAll);
 app.get("/student/:id", StudentController.readOne);
 app.put("/student/:id", StudentController.update);
 app.delete("/student/:id", StudentController.destroy);
 
-app.post("/teacher", TeacherController.create);
-app.get("/teacher", TeacherController.readAll);
+app.post("/teacher", [authMiddleware], TeacherController.create);
+app.get("/teacher", [authMiddleware], TeacherController.readAll);
 app.get("/teacher/:id", TeacherController.readOne);
 app.put("/teacher/:id", TeacherController.update);
 app.delete("/teacher/:id", TeacherController.destroy);
+
+app.post("/register", AuthController.register),
+app.post("/login", AuthController.login)
 
 
 app.get("/", (req, res)=> {
