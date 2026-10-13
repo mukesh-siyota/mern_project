@@ -14,15 +14,15 @@ mongoose.connect("mongodb://localhost:27017/StudentDB");
 
 app.post("/student", [authMiddleware],StudentController.create);
 app.get("/student" , [authMiddleware],  StudentController.readAll);
-app.get("/student/:id", StudentController.readOne);
-app.put("/student/:id", StudentController.update);
-app.delete("/student/:id", StudentController.destroy);
+app.get("/student/:id",[authMiddleware], StudentController.readOne);
+app.put("/student/:id", [authMiddleware], StudentController.update);
+app.delete("/student/:id", [authMiddleware], StudentController.destroy);
 
 app.post("/teacher", [authMiddleware], TeacherController.create);
 app.get("/teacher", [authMiddleware], TeacherController.readAll);
-app.get("/teacher/:id", TeacherController.readOne);
-app.put("/teacher/:id", TeacherController.update);
-app.delete("/teacher/:id", TeacherController.destroy);
+app.get("/teacher/:id", [authMiddleware], TeacherController.readOne);
+app.put("/teacher/:id", [authMiddleware], TeacherController.update);
+app.delete("/teacher/:id", [authMiddleware], TeacherController.destroy);
 
 app.post("/register", AuthController.register),
 app.post("/login", AuthController.login)
